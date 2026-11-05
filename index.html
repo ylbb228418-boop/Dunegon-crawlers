@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#08090d" />
+  <title>DOWNFALL — Touch Dungeon Crawler</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="app-shell">
+    <section class="game-frame" aria-label="Downfall dungeon crawler">
+      <div class="grain" aria-hidden="true"></div>
+
+      <header class="topbar">
+        <div class="brand-lockup">
+          <span class="brand-mark" aria-hidden="true">⌁</span>
+          <div>
+            <p class="eyebrow">ONE-HAND DUNGEON RUN</p>
+            <h1>DOWNFALL</h1>
+          </div>
+        </div>
+        <div class="run-stats">
+          <div><span>FLOOR</span><strong id="floorValue">01</strong></div>
+          <div><span>DEPTH</span><strong id="depthValue">120m</strong></div>
+          <div class="relic-stat"><span>RELICS</span><strong id="relicValue">00</strong></div>
+          <div class="coin-stat"><span>COINS</span><strong id="coinValue">00</strong></div>
+          <button class="header-button" id="classButton" type="button">CLASS <b id="classValue">WANDERER</b></button>
+          <button class="header-button" id="shopButton" type="button">SHOP</button>
+          <button class="header-button" id="crewButton" type="button">CREW <b id="crewValue">00</b></button>
+          <button class="header-button" id="backpackButton" type="button">PACK <b id="packCount">00/10</b></button>
+        </div>
+      </header>
+
+      <section class="status-row" aria-label="Run status">
+        <div class="health-wrap">
+          <div class="meter-label"><span>VITALS</span><strong id="healthText">100 / 100</strong></div>
+          <div class="meter"><span id="healthMeter"></span></div>
+        </div>
+        <div class="streak-badge"><span class="pulse-dot"></span><span id="streakText">COLD START</span></div>
+      </section>
+
+      <section class="game-stage" id="gameStage">
+        <div class="stage-copy">
+          <p class="eyebrow" id="roomLabel">THE DROWNED GATE</p>
+          <h2 id="roomTitle">Something heard you arrive.</h2>
+        </div>
+
+        <div class="depth-rail" aria-label="Dungeon depth">
+          <span>UP</span>
+          <div class="rail-line"><i id="depthMarker"></i></div>
+          <span>DOWN</span>
+        </div>
+
+        <div class="explore-hud">
+          <div class="explore-portrait"><span></span><b id="hudHpText">100</b></div>
+          <div class="explore-bars"><div><span>VITALS</span><i id="hudHpBar"></i></div><div><span>FLOOR</span><strong id="hudFloorText">01</strong></div></div>
+          <button class="guide-button" id="guideButton" type="button">GUIDE</button><button class="sound-button" id="soundButton" type="button" aria-pressed="true">SOUND</button>
+        </div>
+
+        <div class="scene" id="scene" aria-live="polite">
+          <div class="surface-world" id="surfaceWorld" aria-label="Surface camp">
+            <div class="surface-tree tree-a"></div><div class="surface-tree tree-b"></div><div class="surface-tree tree-c"></div><div class="surface-tree tree-d"></div>
+            <div class="camp-prop prop-crate prop-crate-a"><i></i><b></b></div><div class="camp-prop prop-crate prop-crate-b"><i></i><b></b></div><div class="camp-prop prop-barrel barrel-a"><i></i></div><div class="camp-prop prop-barrel barrel-b"><i></i></div><div class="camp-prop prop-lantern lantern-a"><i></i></div><div class="camp-prop prop-rock rock-a"></div><div class="camp-prop prop-rock rock-b"></div>
+            <div class="campfire"><i></i><b></b><span></span></div>
+            <div class="camp-path path-a"></div><div class="camp-path path-b"></div><div class="camp-banner"><span>SAFE CAMP</span><b>REST // PREPARE // RETURN</b></div>
+            <div class="surface-tent tent-a"><span></span></div><div class="surface-tent tent-b"><span></span></div>
+            <button class="surface-npc npc-shop" data-npc="merchant" type="button"><i></i><b></b><em>MERCHANT</em></button><button class="surface-npc npc-pack" data-npc="packer" type="button"><i></i><b></b><em>PACKER</em></button><button class="surface-npc npc-class" data-npc="trainer" type="button"><i></i><b></b><em>TRAINER</em></button><button class="surface-npc npc-crew" data-npc="recruiter" type="button"><i></i><b></b><em>RECRUITER</em></button>
+            <div class="surface-hunter hunter-a"><i></i><b></b><span>SCOUT</span></div><div class="surface-hunter hunter-b"><i></i><b></b><span>WATCH</span></div>
+            <div class="surface-sign sign-shop">EQUIPMENT SHOP<small>BUY / SELL GEAR</small></div>
+            <div class="surface-sign sign-pack">PACK UPGRADE<small>+5 SLOTS</small></div>
+            <div class="surface-sign sign-class">CLASS HALL<small>SPEND COINS</small></div>
+            <div class="surface-sign sign-crew">RECRUIT HALL<small>HIRE HELP</small></div>
+            <button class="storage-box" id="storageBox" type="button"><span></span><b>STORAGE</b></button>
+            <div class="surface-sign sign-dungeon">DUNGEON STAIRS<small>ENTER THE DEPTHS</small></div>
+            <div class="surface-player" id="surfacePlayer"><div class="surface-pack"></div><div class="surface-cape"></div><div class="surface-head"></div><div class="surface-weapon"></div></div>
+            <div class="companion companion-a" id="surfaceCompanionA"><div class="companion-pack"></div><div class="companion-cape"></div><div class="companion-head"></div><div class="companion-weapon"></div><div class="companion-health"></div></div>
+            <div class="companion companion-b" id="surfaceCompanionB"><div class="companion-pack"></div><div class="companion-cape"></div><div class="companion-head"></div><div class="companion-weapon"></div><div class="companion-health"></div></div>
+          </div>
+          <div class="pixel-dungeon" id="pixelDungeon" aria-label="Dungeon room">
+            <div class="dungeon-room room-west" aria-hidden="true"><b>WEST CELL</b></div><div class="dungeon-corridor corridor-west" aria-hidden="true"></div><div class="dungeon-room room-heart" aria-hidden="true"><b>THE HEARTWAY</b></div><div class="dungeon-corridor corridor-east" aria-hidden="true"></div><div class="dungeon-room room-east" aria-hidden="true"><b>EAST VAULT</b></div>
+            <div class="dungeon-fog" aria-hidden="true"></div>
+            <div class="tribe-celebration hidden" id="tribeCelebration" aria-label="Monster tribe celebration"><span>MONSTER TRIBE CELEBRATION</span><b>KEEP CLEAR OR GO AROUND</b><i></i><i></i><i></i></div>
+            <div class="tile-wall wall-top"></div><div class="tile-wall wall-left"></div><div class="tile-wall wall-right"></div><div class="tile-wall wall-bottom"></div>
+            <div class="dungeon-prop pillar pillar-a"><i></i></div><div class="dungeon-prop pillar pillar-b"><i></i></div><div class="dungeon-prop rubble rubble-a"></div><div class="dungeon-prop rubble rubble-b"></div><div class="dungeon-prop water-pool"><i></i><i></i></div>
+            <div class="vine vine-a"></div><div class="vine vine-b"></div>
+            <div class="stairs-portal" id="stairsPortal"><span>↡</span><b>STAIRS</b></div>
+            <button class="pixel-chest chest-west" data-chest="west" type="button" aria-label="Open west chest"><span></span></button><button class="pixel-chest chest-north" data-chest="north" type="button" aria-label="Open north chest"><span></span></button><button class="pixel-chest chest-east" data-chest="east" type="button" aria-label="Open east chest"><span></span></button><button class="pixel-chest chest-south" data-chest="south" type="button" aria-label="Open south chest"><span></span></button><button class="pixel-chest chest-hidden" data-chest="hidden" type="button" aria-label="Open hidden chest"><span></span></button>
+            <div class="pixel-enemy pixel-enemy-a"><i></i><b></b><span></span></div>
+            <div class="pixel-enemy pixel-enemy-b"><i></i><b></b><span></span></div>
+            <div class="pixel-enemy pixel-enemy-c"><i></i><b></b><span></span></div>
+            <div class="pixel-player" id="pixelPlayer"><div class="pixel-pack"></div><div class="pixel-cape"></div><div class="pixel-head"></div><div class="pixel-weapon"></div></div>
+            <div class="companion companion-a" id="dungeonCompanionA"><div class="companion-pack"></div><div class="companion-cape"></div><div class="companion-head"></div><div class="companion-weapon"></div><div class="companion-health"></div></div>
+            <div class="companion companion-b" id="dungeonCompanionB"><div class="companion-pack"></div><div class="companion-cape"></div><div class="companion-head"></div><div class="companion-weapon"></div><div class="companion-health"></div></div>
+          </div>
+          <div class="arch arch-back"></div>
+          <div class="arch arch-front"></div>
+          <div class="fog fog-one"></div>
+          <div class="fog fog-two"></div>
+          <div class="floor-shadow"></div>
+          <div class="monster" id="monsterVisual" aria-label="Enemy">
+            <div class="monster-aura"></div>
+            <div class="monster-body"><i></i><i></i><b></b></div>
+            <div class="monster-name" id="enemyName">GUTTER WRAITH</div>
+            <div class="enemy-meter"><span id="enemyMeter"></span></div>
+          </div>
+          <div class="player-hero" id="playerVisual" aria-label="Player">
+            <div class="backpack-visual"></div><div class="cape"></div><div class="helmet"></div><div class="blade"></div>
+          </div>
+          <div class="damage-pop" id="damagePop"></div>
+          <div class="scene-message" id="sceneMessage">HOLD TO CHARGE</div>
+        </div>
+
+        <div class="movement-pad" aria-label="Move around the dungeon">
+          <button data-move="up" type="button">▲</button><button data-move="left" type="button">◀</button><button data-move="down" type="button">▼</button><button data-move="right" type="button">▶</button>
+        </div>
+        <div class="service-prompt hidden" id="servicePrompt"><strong id="servicePromptTitle">EQUIPMENT SHOP</strong><span>HOLD ENTER TO ENTER</span><i><em id="serviceCharge"></em></i></div>
+        <div class="explore-log" id="exploreLog" aria-live="polite"><p>Ready when you are.</p></div>
+
+        <div class="loot-card hidden" id="lootCard">
+          <div class="loot-icon" id="lootIcon">✦</div>
+          <div class="loot-copy"><span class="eyebrow" id="lootRarity">ROOM CLEAR</span><strong id="lootName">ASHEN SHARD</strong><small id="lootDescription">Warm to the touch. Worth 1 relic.</small></div>
+          <div class="loot-actions"><button class="mini-button" id="equipButton" type="button">EQUIP</button><button class="mini-button ghost-button" id="stashButton" type="button">PACK</button></div>
+        </div>
+
+        <div class="combat-log" id="combatLog">The corridor narrows around you.</div>
+      </section>
+
+      <section class="control-deck" aria-label="Touch controls">
+        <div class="left-controls">
+          <button class="control-button guard-button" id="guardButton" type="button" aria-pressed="false">
+            <span class="button-icon">◉</span><span>GUARD</span><small>HOLD</small>
+          </button>
+          <button class="control-button shift-button" id="shiftButton" type="button">
+            <span class="button-icon">↺</span><span>SHIFT</span><small>STEP</small>
+          </button>
+        </div>
+        <div class="attack-zone">
+          <div class="charge-track"><span id="chargeMeter"></span></div>
+          <button class="attack-button" id="attackButton" type="button">
+            <span class="attack-ring"></span><span class="attack-glyph">↗</span><strong id="attackLabel">STRIKE</strong><small>HOLD / RELEASE</small>
+          </button>
+        </div>
+        <div class="right-controls">
+          <button class="control-button loot-button hidden" id="descendButton" type="button">
+            <span class="button-icon">↧</span><span>DESCEND</span><small>SWIPE DOWN</small>
+          </button>
+          <div class="hint-card"><span>TIP</span><p>Build charge<br />then release.</p></div>
+        </div>
+      </section>
+
+      <footer class="bottom-bar">
+        <span><b>TOUCH</b> controls ready</span>
+        <span id="runMessage">GO DEEPER. TAKE EVERYTHING.</span>
+      </footer>
+
+      <div class="start-overlay" id="startOverlay">
+        <div class="start-mark">⌁</div>
+        <p class="eyebrow">A TOUCH-FIRST DUNGEON CRAWLER</p>
+        <h2>DOWNFALL</h2>
+        <p class="start-copy" id="startCopy">Grab the relics. Break the things in your way. Keep going down.</p>
+        <div class="character-builder">
+          <div class="builder-head"><span class="eyebrow">CHARACTER SETUP</span><strong id="selectedClassLabel">WANDERER</strong></div>
+          <div class="class-picker" id="classPicker" aria-label="Choose a class"></div>
+          <div class="look-picker" aria-label="Choose a character color">
+            <span>MARK YOUR ARMOR</span>
+            <button class="look-button selected look-ember" data-look="ember" type="button" aria-label="Ember color"></button>
+            <button class="look-button look-frost" data-look="frost" type="button" aria-label="Frost color"></button>
+            <button class="look-button look-void" data-look="void" type="button" aria-label="Void color"></button>
+          </div>
+          <label class="name-picker"><span>NAME YOUR HERO</span><input id="heroNameInput" maxlength="18" placeholder="WANDERER" autocomplete="off" /></label>
+        </div>
+        <div class="difficulty-picker" aria-label="Choose difficulty">
+          <button class="difficulty-button" data-difficulty="easy" type="button"><b>EASY</b><small>ENEMY 70%</small></button>
+          <button class="difficulty-button selected" data-difficulty="medium" type="button"><b>MEDIUM</b><small>ENEMY 100%</small></button>
+          <button class="difficulty-button" data-difficulty="hard" type="button"><b>HARD</b><small>ENEMY 140%</small></button>
+        </div>
+        <div class="control-picker" aria-label="Choose controls"><span>SPAWN CONTROLS</span><button class="control-choice" data-control-mode="computer" type="button">COMPUTER<small>SPACE TO ATTACK</small></button><button class="control-choice selected" data-control-mode="mobile" type="button">MOBILE<small>TOUCH CONTROLS</small></button></div>
+        <button class="start-button" id="startButton" type="button"><span>START THE RUN</span><b>↗</b></button>
+        <button class="index-button" id="indexButton" type="button">OPEN MONSTER INDEX <span>→</span></button>
+        <button class="index-button" id="startShopButton" type="button">VISIT THE SHOP <span>→</span></button>
+        <button class="index-button" id="startCrewButton" type="button">RECRUIT COMPANIONS <span>→</span></button>
+        <div class="start-instructions"><span>LEFT THUMB</span><i></i><span>GUARD / SHIFT</span><span>RIGHT THUMB</span><i></i><span>CHARGE / STRIKE</span></div>
+      </div>
+
+      <div class="modal hidden" id="indexModal" role="dialog" aria-modal="true" aria-labelledby="indexTitle">
+        <div class="modal-panel index-panel">
+          <div class="modal-head"><div><p class="eyebrow">FIELD GUIDE // LOOT TABLES</p><h2 id="indexTitle">MONSTER INDEX</h2></div><button class="close-button" data-close="indexModal" type="button">×</button></div>
+          <p class="modal-intro">Every monster carries a different kind of danger — and a different reward.</p>
+          <div class="index-grid" id="indexGrid"></div>
+        </div>
+      </div>
+
+      <div class="modal hidden" id="packModal" role="dialog" aria-modal="true" aria-labelledby="packTitle">
+        <div class="modal-panel pack-panel">
+          <div class="modal-head"><div><p class="eyebrow">LOADOUT // 10 SLOTS</p><h2 id="packTitle">BACKPACK</h2></div><button class="close-button" data-close="packModal" type="button">×</button></div>
+          <div class="stat-strip" id="statStrip"></div>
+          <div class="equipment-grid" id="equipmentGrid"></div>
+          <div class="pack-list" id="packList"></div>
+          <section class="storage-panel" aria-labelledby="storageTitle">
+            <div class="storage-head"><div><p class="eyebrow">CAMP CHEST // SAFE STORAGE</p><h3 id="storageTitle">STORAGE UNIT</h3></div><strong id="storageCount">00/30</strong></div>
+            <p class="storage-copy">Store equipped gear or backpack loot here. Storage survives a failed dungeon run.</p>
+            <div class="pack-list" id="storageList"></div>
+          </section>
+        </div>
+      </div>
+
+      <div class="modal hidden" id="classModal" role="dialog" aria-modal="true" aria-labelledby="classTitle">
+        <div class="modal-panel class-panel">
+          <div class="modal-head"><div><p class="eyebrow">COIN SHOP // CLASS HALL</p><h2 id="classTitle">CHOOSE YOUR CLASS</h2></div><button class="close-button" data-close="classModal" type="button">×</button></div>
+          <p class="modal-intro">Spend coins dropped by monsters to unlock a new way to fight.</p>
+          <div class="class-picker class-picker-run" id="classPickerRun"></div>
+        </div>
+      </div>
+
+      <div class="modal hidden" id="crewModal" role="dialog" aria-modal="true" aria-labelledby="crewTitle">
+        <div class="modal-panel crew-panel">
+          <div class="modal-head"><div><p class="eyebrow">RECRUIT HALL // RANDOM ROSTER</p><h2 id="crewTitle">DUNGEON CREW</h2></div><button class="close-button" data-close="crewModal" type="button">×</button></div>
+          <p class="modal-intro">Hire up to two companions. Each recruit has a different name, look, gender, armor, and weapon.</p>
+          <div class="crew-balance"><span>YOUR COINS</span><strong id="crewCoinValue">00</strong><button class="mini-button" id="hireCrewButton" type="button">HIRE RANDOM · 35</button></div>
+          <div class="crew-list" id="crewList"></div>
+        </div>
+      </div>
+
+      <div class="modal hidden" id="questModal" role="dialog" aria-modal="true" aria-labelledby="questTitle">
+        <div class="modal-panel quest-panel">
+          <button class="close-button" data-close="questModal" type="button">×</button>
+          <p class="eyebrow" id="questNpcLabel">CAMP NPC // REQUEST</p>
+          <h2 id="questTitle">A JOB IN THE DARK</h2>
+          <p class="quest-giver" id="questGiver">Someone has work for you.</p>
+          <div class="quest-card"><span class="quest-icon" id="questIcon">!</span><div><h3 id="questName">QUEST</h3><p id="questDescription">Complete the request.</p><strong id="questProgress">0 / 1</strong></div></div>
+          <p class="quest-reward" id="questReward">REWARD // 20 COINS</p>
+          <button class="start-button" id="questActionButton" type="button"><span>ACCEPT QUEST</span><b>↗</b></button>
+        </div>
+      </div>
+
+      <div class="modal hidden" id="tutorialModal" role="dialog" aria-modal="true" aria-labelledby="tutorialTitle">
+        <div class="modal-panel tutorial-panel">
+          <p class="eyebrow">CAMP GUIDE // FIRST ARRIVAL</p>
+          <h2 id="tutorialTitle">DO YOU WANT A TUTORIAL?</h2>
+          <p class="modal-intro">A guide can show you movement, scouting, charging attacks, guarding, and how to reach the stairs. Beat the training enemy to earn your first weapon.</p>
+          <div class="stairs-actions"><button class="start-button" id="tutorialYesButton" type="button"><span>SHOW ME</span><b>→</b></button><button class="start-button ghost-start" id="tutorialNoButton" type="button"><span>I KNOW THE WAY</span><b>↡</b></button></div>
+        </div>
+      </div>
+
+      <div class="modal hidden" id="deathModal" role="dialog" aria-modal="true" aria-labelledby="deathTitle">
+        <div class="modal-panel death-panel">
+          <button class="close-button death-close" data-close="deathModal" type="button">×</button>
+          <p class="eyebrow">DUNGEON MEMORIAL // RUN ENDED</p>
+          <h2 id="deathTitle">THE DARK REMEMBERS</h2>
+          <div class="death-portrait"><span></span></div>
+          <div class="death-replay" id="deathReplay" aria-label="Animated final moments"><div class="replay-room"><i class="replay-player"></i><i class="replay-enemy"></i><b class="replay-flash"></b><span id="replayCaption">FINAL MOMENTS</span></div></div>
+          <h3 id="deadName">WANDERER</h3>
+          <p class="death-years" id="deadYears">1000 — 1024</p>
+          <p class="death-stats" id="deathStats">KILLS // 0</p>
+          <div class="death-scenes" id="deathScenes"><p>The final moments were lost to the dark.</p></div>
+          <p class="death-note" id="deadFamily">A note was sent to your family.</p>
+          <blockquote id="deadQuote">“The stairs were waiting. I went anyway.”</blockquote>
+          <button class="start-button" id="returnCampButton" type="button"><span>RETURN TO CAMP</span><b>↟</b></button>
+        </div>
+      </div>
+
+      <div class="modal hidden" id="guideModal" role="dialog" aria-modal="true" aria-labelledby="guideTitle">
+        <div class="modal-panel guide-panel">
+          <div class="modal-head"><div><p class="eyebrow">FIELD GUIDE // NO HUNGER SYSTEM</p><h2 id="guideTitle">HOW TO SURVIVE</h2></div><button class="close-button" data-close="guideModal" type="button">×</button></div>
+          <div class="guide-list"><p><b>SCOUT</b> Move through the dark to reveal the room. Enemies reposition after they act.</p><p><b>CHARGE</b> Hold STRIKE, then release for a stronger hit.</p><p><b>GEAR</b> Equip loot or store it. Your storage box is back at camp.</p><p><b>STAIRS</b> Clear a floor, then step onto the glowing stairs to choose retreat or descent.</p><p><b>CREW</b> Hired companions help you attack, but they can fall in battle.</p></div>
+        </div>
+      </div>
+
+      <div class="modal hidden" id="stairsModal" role="dialog" aria-modal="true" aria-labelledby="stairsTitle">
+        <div class="modal-panel stairs-panel">
+          <p class="eyebrow">THE STAIRWELL // FLOOR SECURED</p>
+          <h2 id="stairsTitle">THE STAIRS WAIT.</h2>
+          <p class="modal-intro">Your loot is safe for now. Retreat with what you have, or risk it all and continue down.</p>
+          <div class="stairs-actions"><button class="start-button" id="retreatButton" type="button"><span>RETREAT UP</span><b>↟</b></button><button class="start-button danger-button" id="continueButton" type="button"><span>CONTINUE DOWN</span><b>↡</b></button></div>
+        </div>
+      </div>
+
+      <div class="modal hidden" id="shopModal" role="dialog" aria-modal="true" aria-labelledby="shopTitle">
+        <div class="modal-panel shop-panel">
+          <div class="modal-head"><div><p class="eyebrow">MERCHANT // BUY OR SELL</p><h2 id="shopTitle">THE UNDERMARKET</h2></div><button class="close-button" data-close="shopModal" type="button">×</button></div>
+          <div class="market-stalls" aria-label="Tiny market sellers"><div class="market-stall"><div class="market-npc npc-blade"><i></i><b></b></div><strong>VEX</strong><small>WEAPONS</small></div><div class="market-stall"><div class="market-npc npc-plate"><i></i><b></b></div><strong>ORRA</strong><small>ARMOR</small></div><div class="market-stall"><div class="market-npc npc-packrat"><i></i><b></b></div><strong>PACKRAT</strong><small>UPGRADES</small></div></div>
+          <div class="shop-balance"><span>YOUR COINS</span><strong id="shopCoinValue">00</strong><button class="mini-button" id="buyGearButton" type="button">BUY GEAR</button><button class="mini-button sell-button" id="sellGearButton" type="button">SELL GEAR</button><button class="mini-button upgrade-button" id="upgradePackButton" type="button">PACK +5</button><button class="mini-button" id="refreshShopButton" type="button">REFRESH · 5</button></div>
+          <div class="shop-grid" id="shopGrid"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <script src="game.js"></script>
+</body>
+</html>
